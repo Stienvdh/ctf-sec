@@ -1,9 +1,16 @@
 #!/usr/bin/env python
 
 import requests
-import env
 import datetime
 import json
+import sys
+from pathlib import Path
+
+here = Path(__file__).parent.absolute()
+repository_root = (here / ".." ).resolve()
+sys.path.insert(0, str(repository_root))
+
+import env
 
 inv_token = env.UMBRELLA.get("inv_token")
 inv_url = env.UMBRELLA.get("inv_url")
