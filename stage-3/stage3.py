@@ -63,6 +63,10 @@ def ctr_respond(observables):
 
     resp_ctr1 = requests.post(f"https://{ctr_host}/iroh/iroh-response/respond/observables", headers=headers, json=observables)
 
+    trigger_url = resp_ctr1.json()["data"][0]["url"]
+    trigger_resp = requests.post(f"https://{ctr_host}/iroh/iroh-response{trigger_url}", headers=headers, json=observables)
+    trigger_resp.raise_for_status()
+
     return resp_ctr1.json()["data"]
 
 if __name__ == "__main__":
@@ -72,8 +76,7 @@ if __name__ == "__main__":
     OBSERVABLES = ctr_inspect(EXAMPLE_SHA)
     
     with open("stage3.json", 'w') as f:
-        f.write(json.dumps(ctr_enrich(OBSERVABLES), indent=2))
-        f.write(json.dumps(ctr_respond(OBSERVABLES), indent=2))
-
+        f.write(f"Information about the hash: \n{json.dumps(ctr_enrich(OBSERVABLES), indent=2)} \n\n")
+        f.write(f"Actions taken: \n{json.dumps(ctr_respond(OBSERVABLES), indent=2)}")
 
 
